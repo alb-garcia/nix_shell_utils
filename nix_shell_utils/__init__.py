@@ -59,6 +59,8 @@ def cd(path: str) -> str:
 
     Returns: previous Python working directory
     """
+    if path == '':
+        path = os.path.expandvars('$HOME')
     old_dir = os.getcwd()
     os.chdir(str(expand(path))) # str cast for static type checking
     return old_dir
