@@ -1,0 +1,21 @@
+[project]
+
+name = "nix_shell_utils"
+description = "Python wrapper functions for common shell commands"
+version = "0.0.1"
+authors = [{name = "Alberto Garcia Izquierdo"}]
+license = {file = "LICENSE"}
+readme = "README.rst"
+requires-python = ">3.6"
+
+dependencies = []
+
+[project.urls]
+repository    = "https://github.com/alb-garcia/nix_shell_utils"
+home          = "https://github.com/alb-garcia/nix_shell_utils"
+documentation = "https://github.com/alb-garcia/nix_shell_utils"
+
+[build-system]
+requires = ["setuptools>=43.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
