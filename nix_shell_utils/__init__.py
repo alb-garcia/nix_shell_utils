@@ -173,7 +173,10 @@ def pj(*paths: str, leaf: bool = True) -> str:
         ==> '/home/foo/bar/a.txt'`
     """
     joint_path = ''
-    for p in paths:
+    for (i,p) in enumerate(paths):
+        # if i != 0 and p[0] == '/':
+        #     p = p[1:]
+            
         if p != '':
             if p[-1] == '/':
                 joint_path += p
