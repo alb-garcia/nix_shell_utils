@@ -68,7 +68,7 @@ def cd(path: str) -> str:
 def rm(path: str) -> None:
     """ executes shell command ``rm -rf path``,effectively removing ``path``silently."""
     
-    run(f'\rm -rf {path}')
+    run(f'rm -rf {path}')
 
 def ln(src: str, dest: str) -> None:
     """ runs shell command ``ln -s src dest``.
@@ -162,23 +162,25 @@ def root_files(files: List[str], root: str) -> List[str]:
 
     Returns: a list of files prepended by the ``root`` path.
     """
-    return list([pjoin(root,f) for f in files])
+    return list([pj(root,f) for f in files])
 
-def pjoin(*paths: str, leaf: bool = True) -> str:
+def pj(*paths: str, leaf: bool = True) -> str:
     """ join a number of paths into a single one.
 
     Examples::
     
-        >>> pjoin('/home/foo', 'bar', 'a.txt')
+        >>> pj('/home/foo', 'bar', 'a.txt')
         ==> '/home/foo/bar/a.txt'`
     """
     joint_path = ''
     for p in paths:
-        if p[-1] == '/':
-            joint_path += p
-        else:
-            joint_path += p + '/'
-    if leaf:
+        if p != '':
+            if p[-1] == '/':
+                joint_path += p
+            else:
+                joint_path += p + '/'
+
+    if leaf and joint_path != '':
         return joint_path[:-1]
     else:
         return joint_path
