@@ -22,61 +22,62 @@ def test_pwd():
     assert pwd() == os.getcwd()
     
 def test_cd():
+    old_dir = os.getcwd()
+
     expected = os.getcwd() + '/test_dir1/test_dir2'
+
     os.system('mkdir -p ./test_dir1/test_dir2')
-    od = cd('./test_dir1/test_dir2')
-    od = cd(od)
-    os.system('rm -rf ./test_dir1')
-    assert od == expected
+    with cd('./test_dir1/test_dir2'):
+        assert os.getcwd() == expected
 
-def test_cd2():
+    assert os.getcwd() == old_dir
+    
     with pytest.raises(FileNotFoundError):
-            cd('./this_path_does_not_exist')
+            with cd('./this_path_does_not_exist'):
+                pass
 
-def test_cd3():
-    expected1 = os.getcwd()
-    expected2 = os.path.expandvars('$HOME')
-    
-    curdir = cd('~')
-    assert curdir == expected1
-    assert os.getcwd() == expected2
-    home_dir = cd(curdir)
-    assert home_dir == expected2
-
-    od = cd('$HOME')
-    assert od == expected1
-    assert os.getcwd() == expected2
-    hd = cd(od)
-    assert hd == expected2
-    
-def test_cd4():
-    """ just 'cd' should take you $HOME"""
+    #check paths with environment variables, '~' expansion
     expected = os.path.expandvars('$HOME')
-    od = cd('')
-    assert os.getcwd() == expected
-    cd(od)
+    
+    with cd('~'):
+        assert os.getcwd() == expected
+    assert os.getcwd() == old_dir
+
+    with cd('$HOME'):
+        assert os.getcwd() == expected
+    assert os.getcwd() == old_dir
+
+    # cd('') should take you $HOME
+    expected = os.path.expandvars('$HOME')
+    with cd(''):
+        assert os.getcwd() == expected
+
+    assert os.getcwd() == old_dir
     
 def test_mkdir():
     cdir = os.getcwd()
     expected = cdir + '/test_dir1/test_dir2'
     mkdir('./test_dir1/test_dir2')
-    od = cd('./test_dir1/test_dir2')
-    od = cd(od)
-    assert od == expected
+    
+    with cd('./test_dir1/test_dir2'):
+        assert os.getcwd() == expected
+
     os.system('rm -rf test_dir1')
 
-def test_mkdir2():
-    cdir = os.getcwd()
     expected = [cdir + '/test_dir1/test_dir2', cdir + '/test_dir3/test_dir4']
+    
     mkdir(['./test_dir1/test_dir2', './test_dir3/test_dir4'])
-    od = cd('./test_dir1/test_dir2')
-    first = cd(od)
-    od = cd('./test_dir3/test_dir4')
-    second = cd(od)
+    
+    with cd('./test_dir1/test_dir2'):
+        assert expected[0] == os.getcwd()
+
+    with cd('./test_dir3/test_dir4'):
+        assert expected[1] == os.getcwd()
+        
     os.system('rm  -rf test_dir1')
     os.system('rm  -rf test_dir3')    
+
     
-    assert [first,second] == expected
 
 def test_root_files():
     files = ['foo', 'spam']
@@ -96,23 +97,23 @@ def test_bglob():
     for f in files:
         os.system(f'touch test_bglob/{f}')
     
-    od = cd('test_bglob')
-    assert bglob('*.cmd') == ['baa.cmd']
+    with cd('test_bglob'):
+        assert bglob('*.cmd') == ['baa.cmd']
+
+        txt = bglob('*.txt')
+        assert 'aaa.txt' in txt and 'baa.txt' in txt
+
+        txt = bglob('aaa.*')
+        assert 'aaa.txt' in txt and 'aaa.log' in txt
+
+        assert bglob('ccc.*') == []
+
+
+        print(os.getcwd())
+        txt = bglob('./*')
+        assert set(txt) == set(['aaa.txt','baa.txt','aaa.log','baa.log','bbb.log','baa.cmd'])
+        os.system('rm -rf *.txt *.log *.cmd')
     
-    txt = bglob('*.txt')
-    assert 'aaa.txt' in txt and 'baa.txt' in txt
-    
-    txt = bglob('aaa.*')
-    assert 'aaa.txt' in txt and 'aaa.log' in txt
-
-    assert bglob('ccc.*') == []
-
-
-    print(os.getcwd())
-    txt = bglob('./*')
-    assert set(txt) == set(['aaa.txt', 'baa.txt', 'aaa.log', 'baa.log', 'bbb.log', 'baa.cmd'])
-    os.system('rm -rf *.txt *.log *.cmd')
-    cd(od)
     os.system('rm -rf ./test_bglob')
 
 def test_aglob():
@@ -121,23 +122,23 @@ def test_aglob():
     for f in files:
         os.system(f'touch test_aglob/{f}')
     
-    od = cd('test_aglob')
-    ap = os.path.abspath('.')
-    assert aglob('*.cmd') == [ap + '/' + 'baa.cmd']
-    
-    txt = aglob('*.txt')
-    assert ap + '/' + 'aaa.txt' in txt and ap + '/' + 'baa.txt' in txt
-    
-    txt = aglob('aaa.*')
-    assert ap + '/' + 'aaa.txt' in txt and ap + '/' + 'aaa.log' in txt
+    with cd('test_aglob'):
+        ap = os.path.abspath('.')
+        assert aglob('*.cmd') == [ap + '/' + 'baa.cmd']
 
-    assert aglob('ccc.*') == []
+        txt = aglob('*.txt')
+        assert ap + '/' + 'aaa.txt' in txt and ap + '/' + 'baa.txt' in txt
 
-    txt = aglob('./*')
-    s = set([ap + '/' + f for f in ['aaa.txt', 'baa.txt', 'aaa.log', 'baa.log', 'bbb.log', 'baa.cmd']])
-    assert set(txt) == s
-    os.system('rm -rf *.txt *.log *.cmd')
-    cd(od)
+        txt = aglob('aaa.*')
+        assert ap + '/' + 'aaa.txt' in txt and ap + '/' + 'aaa.log' in txt
+
+        assert aglob('ccc.*') == []
+
+        txt = aglob('./*')
+        s = set([ap + '/' + f for f in ['aaa.txt','baa.txt','aaa.log','baa.log','bbb.log','baa.cmd']])
+        assert set(txt) == s
+        os.system('rm -rf *.txt *.log *.cmd')
+
     os.system('rm -rf ./test_aglob')
 
 def test_basename():
@@ -163,22 +164,70 @@ def test_expand():
     assert home == expand('$HOME')
     assert home == expand('~')
     assert home + '/PROJECT/foo' == expand('~/$PROJECT/foo')
+    assert [home, home + '/PROJECT/foo'] == expand(['$HOME', '~/$PROJECT/foo'])
     os.unsetenv('PROJECT')
 
 def test_rm():
     mkdir('test1_dir')
     rm('test1_dir')
     with pytest.raises(FileNotFoundError):
-            cd('./test1_dir')
+        with cd('./test1_dir'):
+            pass
+    rm('does_not_exist/at/all') #silently does nothing
 
-    rm('does_not_exist') #silently does nothing
 
+
+def test_cp():
+    srcdir = 'test_cp_src'
+    dstdir = 'test_cp_dst'
+    files  = ['t1','t2','t3','t4']
+    mkdir(srcdir)
+    mkdir(dstdir)
+
+    with cd(srcdir):
+        for f in files: os.system(f'touch {f}')
+
+    rsfiles = root_files(files, pj(pwd(), srcdir))
+    rdfiles = root_files(files, pj(pwd(), dstdir))    
+    
+    for rf in rsfiles:
+        cp(rf,dstdir)
+
+    with cd(dstdir):
+        for f in files:
+            assert os.path.isfile(f) == True
+            rm(f)
+
+    cp(rsfiles, dstdir)
+    
+    with cd(dstdir):
+        for f in files:
+            assert os.path.isfile(f) == True
+            rm(f)
+            
+    cp(pj(pwd(), srcdir, '*'), [dstdir,dstdir,dstdir])
+
+    with cd(dstdir):
+        for f in files:
+            assert os.path.isfile(f) == True
+            rm(f)
+    
+    cp(rsfiles, rdfiles)
+    
+    with cd(dstdir):
+        for f in files:
+            assert os.path.isfile(f) == True
+            rm(f)
+
+    rm('test_cp_*')
+    
 def test_ln():
+    expected = pj(os.getcwd(), 'test1_dir/test2_dir')
     mkdir('test1_dir/test2_dir')
     ln('test1_dir/test2_dir', 'link')
-    od = cd('link')
-    nd = cd(od)
-    assert nd == pwd() + '/test1_dir/test2_dir'
+    with cd('link'):
+        assert pwd() == expected
+
     rm('test1_dir')
     rm('link')
 
@@ -206,6 +255,4 @@ def test_run():
     assert c.stdout == ''
     assert c.stderr == '/bin/sh: 1: does: not found\n'
     assert c.returncode == 127
-
-
         

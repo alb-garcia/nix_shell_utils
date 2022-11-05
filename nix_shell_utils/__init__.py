@@ -14,6 +14,7 @@ from subprocess import CompletedProcess, run as sprun
 import os
 import glob
 from typing import List
+from contextlib import contextmanager
 
 
 def mkdir(path: str | List[str]) -> None:
@@ -44,11 +45,15 @@ def cp(src: str | List[str], dest: str | List[str]) -> None:
     elif isinstance(src, str):
         for d in dest:
             run(fr'\cp {src} {d}')
+    elif isinstance(dest, str):
+        for s in src:
+            run(fr'\cp {s} {dest}')
     else:
         for s,d in zip(src,dest):
             run(fr'\cp {s} {d}')
 
-def cd(path: str) -> str:
+@contextmanager            
+def cd(path: str):
     """ changes Python current working directory, returning the previous one.
 
     ``path`` can contain ``~`` or environment variables, they are expanded prior
@@ -63,7 +68,11 @@ def cd(path: str) -> str:
         path = os.path.expandvars('$HOME')
     old_dir = os.getcwd()
     os.chdir(str(expand(path))) # str cast for static type checking
-    return old_dir
+    try:
+        yield
+    finally:
+        os.chdir(old_dir)
+    
 
 def rm(path: str) -> None:
     """ executes shell command ``rm -rf path``,effectively removing ``path``silently."""
