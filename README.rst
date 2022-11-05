@@ -86,6 +86,7 @@ is equivalent to the following shell commands:
        print(os.environ['FOO'] # ==> 'BAR'
        ...
 
+
  will modify temporarily the ``os.environ`` in place so that ``HOME`` env variable is
  deleted, and a new environment variable ``FOO`` is added. Upon leaving the ``with`` block,
  ``os.environ`` is returned to its prior state.
