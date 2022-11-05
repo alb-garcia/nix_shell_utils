@@ -1,5 +1,7 @@
-nix_shell_utils - simple shell-like commands for Python
+nix_shell_utils 
 ==========================================================
+simple shell-like commands for Python
+---------------------------------------
 
 **nix_shell_utils** is a collection of Python function wrappers around commonly
 used shell commands. The idea is to move all the small shell scripts heavily
@@ -35,7 +37,7 @@ Examples
 ------------
 
 
-* the following python
+* cp, cd, mkdir: the following python
   
 .. code-block:: python
 
@@ -75,6 +77,19 @@ is equivalent to the following shell commands:
     cd $PRJ_HOME/logs
     rm -rf *.log
     cd $curdir
+
+* temporary environment: the code under the ``tmpenv`` context manager
+
+.. code-block:: python
+
+   with tmpenv('HOME', FOO='BAR'):
+       print(os.environ['FOO'] # ==> 'BAR'
+       ...
+
+ will modify temporarily the ``os.environ`` in place so that ``HOME`` env variable is
+ deleted, and a new environment variable ``FOO`` is added. Upon leaving the ``with`` block,
+ ``os.environ`` is returned to its prior state.
+
 
 Documentation
 ----------------

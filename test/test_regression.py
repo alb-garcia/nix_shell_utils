@@ -176,7 +176,6 @@ def test_rm():
     rm('does_not_exist/at/all') #silently does nothing
 
 
-
 def test_cp():
     srcdir = 'test_cp_src'
     dstdir = 'test_cp_dst'
@@ -242,17 +241,36 @@ def test_sed():
         assert lo == lm
 
     cp('original_again.txt','original.txt')
-    
+
+def test_runc():
+    assert runc('echo SPAM') == 0
+    assert runc('does/not/exist') != 0
+
+    with pytest.raises(subprocess.CalledProcessError):
+            runc('does_not_exist', blocking = True)
+            
 def test_run():
-    c = run('echo SPAM', quiet = True)
+    c = run('echo SPAM', quiet = False)
     assert c.stdout == 'SPAM\n'
     assert c.stderr == ''
     assert c.args == 'echo SPAM'
     with pytest.raises(subprocess.CalledProcessError):
-        run('does_not_exist')
+        run('does_not_exist', blocking = True)
 
-    c = run('does not exist', blocking = False, quiet = True)
+    c = run('does not exist', quiet = False)
     assert c.stdout == ''
     assert c.stderr == '/bin/sh: 1: does: not found\n'
     assert c.returncode == 127
+
+
+def test_tmpenv():
+    with tmpenv('HOME', FOO='BAR'):
+        with pytest.raises(KeyError):
+            home = os.environ['HOME']
+        assert os.environ['FOO'] == 'BAR'
+
+    with pytest.raises(KeyError):
+        home = os.environ['FOO']
+
+    assert os.environ['HOME'] == expand('~')
         

@@ -10,11 +10,12 @@ where the shell excels at. The idea behind of *nix_shell_utils* is to move those
 codebase.
 """
 
-from subprocess import CompletedProcess, run as sprun
+from subprocess import CompletedProcess, CalledProcessError, run as sprun
 import os
 import glob
-from typing import List
+from typing import List, Dict
 from contextlib import contextmanager
+import sys
 
 
 def mkdir(path: str | List[str]) -> None:
@@ -75,7 +76,11 @@ def cd(path: str):
     
 
 def rm(path: str) -> None:
-    """ executes shell command ``rm -rf path``,effectively removing ``path``silently."""
+    """ executes shell command ``rm -rf path``,effectively removing ``path`` silently.
+
+    Arguments:
+        path : the path to remove.
+    """
     
     run(f'rm -rf {path}')
 
@@ -201,21 +206,131 @@ def pwd() -> str:
     """ short hand for ``os.getcwd()``."""
     return os.getcwd()
 
-def run(cmd: str, blocking: bool = True, quiet: bool = False) -> CompletedProcess:
-    """ wrapper of stdlib's ``subprocess.run`` with reasonable defaults.
+def runc(cmd: str,echo: bool = True, blocking: bool = False) -> int:
+    """ runs the shell command ``cmd`` in `console mode`.
 
+    **runc** is a wrapper of ``subprocess.run`` with the following defaults:
+
+    * by default, it prints the shell command executed in ``stdout``
+    * it prints the outputs and errors of the commmand in ``stdout`` and ``stderr``
+    * it returns the results return code of the command.
+
+    Arguments:
+        cmd : the command by the ``sh`` shell.
+        echo : if ``True``, ``cmd`` is printed in ``stdout``.
+        blocking : if ``True``, a ``CalledProcessError`` exception is thrown if the command fails (return code different from ``0``).
+
+    Returns:
+        the return code of the shell command executed.
+        
+    """
+    if echo:
+        print(cmd)
+    c =  sprun(cmd,
+               shell = True,
+               capture_output = False,
+               check = blocking,
+               universal_newlines=True)
+    
+    return c.returncode
+    
+def run(cmd: str, blocking: bool = False, quiet: bool = True) -> CompletedProcess:
+    """ runs a shell command with a ``subprocess.run`` wrapper with sensible defaults.
+
+    Example::
+
+        >>> c = run('cpu-info')
+        cpu-info
+        Packages:
+                0: Intel Celeron 6305
+        Microarchitectures:
+                2x unknown
+        Cores:
+                0: 1 processor (0), Intel unknown
+                1: 1 processor (1), Intel unknown
+        Logical processors (System ID):
+                0 (0): APIC ID 0x00000000
+                1 (1): APIC ID 0x00000002
+
+        >>> print(c.stdout)
+        Packages:
+                0: Intel Celeron 6305
+        Microarchitectures:
+                2x unknown
+        Cores:
+                0: 1 processor (0), Intel unknown
+                1: 1 processor (1), Intel unknown
+        Logical processors (System ID):
+                0 (0): APIC ID 0x00000000
+                1 (1): APIC ID 0x00000002
+
+        >>> print(c.returncode)
+        0
+    
     Arguments:
         cmd : the command to be run
         blocking: if ``True``, an exception is thrown if the command exit code != 0
-        quiet: if ``True``, the return object contains stdout, stderr. If not, stdout/err are displayed normally.
+        quiet: if ``False``, ``stdout``, ``stderr`` and an echo of the command executed is printed.
     Returns: a :class:``subprocess.CompletedProcess`` object containing exit code, and the command executed (at least).
     """
-    
-    return sprun(cmd,
-                 shell = True,
-                 capture_output = quiet,
-                 check = blocking,
-                 universal_newlines=True)
+    if not quiet:
+        print(cmd)
+    c = sprun(cmd,
+              shell = True,
+              capture_output = True,
+              check = blocking,
+              universal_newlines=True)
+        
+    if not quiet:
+        if c.stdout != '':
+            print(c.stdout, end = '', file = sys.stdout)
+        if c.stderr != '':
+            print(c.stderr, end = '', file = sys.stderr)
+            
+    return c
+
+@contextmanager
+def tmpenv(*remove: str, **update: str):
+    """  context manager to temporarily update the os.environ shell environment in place.
+
+    Example::
+        
+        with tmpenv('HOME', FOO='BAR', FOOD='SPAM'):
+            print('HOME' in os.environ.keys) # => False
+            print(os.environ['FOO']) # => 'BAR'
+            print(os.environ['FOOD']) # => 'SPAM'
+
+        print('HOME' in os.environ.keys) # => True
+        print('FOO' in os.environ.keys) # => False
+        print('FOOD' in os.environ.keys) # => False
+
+    The ``os.environ`` dictionary is updated in-place so that the modification
+    is sure to work in all situations.
+
+    Arguments:
+        remove : environment variable to remove
+        update : environment variables and values to add/update
+    """
+    env = os.environ
+    update = update or {}
+    remove = remove or ()
+
+    # List of environment variables being updated or removed.
+    stomped = (set(update.keys()) | set(remove)) & set(env.keys())
+    # Environment variables and values to restore on exit.
+    update_after = {k: env[k] for k in stomped}
+    # Environment variables and values to remove on exit.
+    remove_after = frozenset(k for k in update if k not in env)
+
+    try:
+        env.update(update)
+        [env.pop(k, None) for k in remove]
+        yield
+    finally:
+        env.update(update_after)
+        [env.pop(k) for k in remove_after]
+
+
 
 def expand(cmd: str | List[str]) -> str | List[str]:
     """ expands environment variables and home (``~``) from the input command/path.
