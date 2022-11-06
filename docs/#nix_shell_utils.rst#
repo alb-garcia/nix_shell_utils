@@ -1,7 +1,0 @@
-nix_shell_utils package
-=========================
-
-o.. automodule:: nix_shell_utils
-   :members:
-   :undoc-members:
-   :show-inheritance:
