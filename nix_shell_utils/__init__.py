@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """
 ==================
 nix_shell_utils
@@ -13,8 +15,6 @@ from typing import List
 from contextlib import contextmanager
 import sys
 
-if sys.version_info < (3,10):
-    from __future__ import annotations
 
 
 def mkdir(path: str | List[str]) -> None:
