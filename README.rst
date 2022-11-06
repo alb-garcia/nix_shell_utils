@@ -9,6 +9,7 @@
 		   
 .. |pic4| image:: ./docs/img/coverage.svg
 
+		  
 	   
 
 nix_shell_utils 
@@ -20,6 +21,9 @@ simple shell-like commands for Python
 used shell commands. The idea is to move all the small shell scripts heavily
 using ``cp``, ``mkdir``, ``rm`` and shell globbing that tend to be used for automation
 into one's Python codebase.
+
+The package is *not* multiplatform: it will only work in unix-like systems (only tested
+in Ubuntu & RHEL).
 
 Dependencies
 -------------
