@@ -1,10 +1,7 @@
 
 .. image:: ./img/python.svg
-	   
 .. image:: ./img/tag.svg
-
 .. image:: ./img/test.svg
-
 .. image:: ./img/coverage.svg
 
 	   
