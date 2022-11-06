@@ -3,7 +3,7 @@
 
 .. |pic1|  image:: ./docs/img/python.svg
 		   
-.. |pic2|  image:: ./docs/img/tag.svg
+.. |pic2|  image:: ./docs/img/tag.svg?
 		   
 .. |pic3|  image:: ./docs/img/test.svg
 		   
