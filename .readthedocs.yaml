@@ -8,9 +8,9 @@ build:
 # sphinx:
 #   fail_on_warning: true
 
+
 python:
-    install:
-        - requirements: docs/rtfd_requirements.txt
-        - method: pip
-        path: .
-  
+  install:
+    - requirements: docs/rtfd_requirements.txt
+    - method: pip
+      path: .
