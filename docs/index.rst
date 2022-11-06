@@ -101,6 +101,10 @@ Package Documentation
    nix_shell_utils
 
 
+.. automodule:: nix_shell_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
      
 Indices and tables
