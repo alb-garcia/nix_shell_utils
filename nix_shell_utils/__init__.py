@@ -9,10 +9,10 @@ Very often, Python scripts are supported by small shell scripts, heavy with cp,r
 where the shell excels at. The idea behind of *nix_shell_utils* is to move those shell scripts into your Python codebase.
 """
 
-from subprocess import CompletedProcess, CalledProcessError, run as sprun
+from subprocess import CompletedProcess, run as sprun
 import os
 import glob
-from typing import List, Dict
+from typing import List
 from contextlib import contextmanager
 import sys
 
