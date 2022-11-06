@@ -5,8 +5,12 @@ build:
   tools:
     python: "3.10"
 
+sphinx:
+  fail_on_warning: true
+
 python:
   # Install our python package before building the docs
   install:
+    - requirements: docs/rtfd_requirements.txt
     - method: pip
       path: .
