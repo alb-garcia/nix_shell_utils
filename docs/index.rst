@@ -130,7 +130,7 @@ Package Documentation
 
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
    nix_shell_utils
