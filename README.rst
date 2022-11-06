@@ -1,8 +1,13 @@
 
-.. image:: ./img/python.svg
-.. image:: ./img/tag.svg
-.. image:: ./img/test.svg
-.. image:: ./img/coverage.svg
+|pic1| |pic2| |pic3| |pic4|
+
+.. |pic1|  image:: ./img/python.svg
+		   
+.. |pic2|  image:: ./img/tag.svg
+		   
+.. |pic3|  image:: ./img/test.svg
+		   
+.. |pic4| image:: ./img/coverage.svg
 
 	   
 
