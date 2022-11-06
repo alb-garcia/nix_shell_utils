@@ -10,6 +10,8 @@ build:
 
 python:
   # Install our python package before building the docs
+  # requirements: docs/rtfd_requirements.txt
   install:
     - method: pip
       path: .
+  
