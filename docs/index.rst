@@ -4,9 +4,6 @@ simple shell-like commands for Python
 ---------------------------------------
 
 
-:doc:`./docs/nix_shell_utils.rst`
-
-
 **nix_shell_utils** is a collection of Python function wrappers around commonly
 used shell commands. The idea is to move all the small shell scripts heavily
 using ``cp``, ``mkdir``, ``rm`` and shell globbing that tend to be used for automation
