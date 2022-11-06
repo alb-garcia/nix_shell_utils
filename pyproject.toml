@@ -13,7 +13,7 @@ dependencies = ["setuptools>64.0"]
 [project.urls]
 repository    = "https://github.com/alb-garcia/nix_shell_utils"
 home          = "https://github.com/alb-garcia/nix_shell_utils"
-documentation = "https://github.com/alb-garcia/nix_shell_utils"
+documentation = "https://nix-shell-utils.readthedocs.io"
 
 [build-system]
 requires = ["setuptools>64.0.0", "wheel"]

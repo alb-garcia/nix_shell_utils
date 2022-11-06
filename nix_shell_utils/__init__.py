@@ -4,9 +4,6 @@ nix_shell_utils
 ==================
 
 **nix_shell_utils** is a collection of wrappers for shell commands that are used frequently in shell scripts.
-
-Very often, Python scripts are supported by small shell scripts, heavy with cp,rm,mkdir... as these tasks are
-where the shell excels at. The idea behind of *nix_shell_utils* is to move those shell scripts into your Python codebase.
 """
 
 from subprocess import CompletedProcess, run as sprun
@@ -15,6 +12,9 @@ import glob
 from typing import List
 from contextlib import contextmanager
 import sys
+
+if sys.version_info < (3,10):
+    from __future__ import annotations
 
 
 def mkdir(path: str | List[str]) -> None:

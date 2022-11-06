@@ -11,7 +11,7 @@ into one's Python codebase.
 Dependencies
 -------------
 
-* Python version required: `3.10+`
+* Python version required: `3.7+`
 * If documentation is to be generated ``sphinx`` and ``sphinx_rtd_theme`` packages are required:
 
 .. code-block:: console
@@ -20,17 +20,16 @@ Dependencies
 
 Installation
 -------------
-1. clone this repository (or download a zip and unzip it somewhere)
 
-.. code-block:: console
+Simply type ::
 
-    git clone https://github.com/alb-garcia/nix_shell_utils.git
+  pip install nix_shell_utils
 
-2. inside the cloned folder, install:
-   
-.. code-block:: console
+  
+Documentation
+----------------
 
-    pip install .
+Documentation can be found @ `readthedocs<https://nix-shell-utils.readthedocs.io>`
 
 
 Examples
@@ -47,7 +46,7 @@ Examples
     src  = '$PRJ_HOME/gen/sv/out'
     mkdir(dest)         # make destination folder
     with cd(src):       # change to src directory - returns automatically to current folder
-        cp('*.sv',dest) # copy all systemverilog files in src to dest folder
+        cp('*.sv',dest) # copy all .sv files in src to dest folder
 	                             
 
 is equivalent to this shell code:
@@ -56,7 +55,7 @@ is equivalent to this shell code:
 
     dest=$PRJ_HOME/sv/src
     src=$PRJ_HOME/gen/sv/out
-    mkdir -p $PRJ_HOME/sv/src
+    mkdir -p $dest
     curdir=$PWD
     cd $src
     cp *.sv $dest
@@ -92,10 +91,32 @@ deleted, and a new environment variable ``FOO`` is added. Upon leaving the ``wit
 ``os.environ`` is returned to its prior state.
 
 
-Documentation
-----------------
+Development
+---------------
+
+1. clone this repository (or download a zip and unzip it somewhere)
+
+.. code-block:: console
+
+    git clone https://github.com/alb-garcia/nix_shell_utils.git
+
+2. inside the cloned folder, make a editable installation
+   
+.. code-block:: console
+
+    pip install -e .
+
+3. To run tests (pytest needs to be installed):
+
+.. code-block:: console
+
+    cd test; pytest -vvv
+
+
+Documentation Generation
+---------------------------
     
-To generate the documentation (assuming the clone repository lives @ $NIX_SHELL_UTILS_DIR:
+To generate the documentation (assuming the clone repository lives @ ``$NIX_SHELL_UTILS_DIR``:
 
 .. code-block:: console
 
