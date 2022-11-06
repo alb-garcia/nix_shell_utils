@@ -4,7 +4,7 @@ simple shell-like commands for Python
 ---------------------------------------
 
 
-:doc:`nix_shell_utils.rst`
+:doc:`./docs/nix_shell_utils.rst`
 
 
 **nix_shell_utils** is a collection of Python function wrappers around commonly
