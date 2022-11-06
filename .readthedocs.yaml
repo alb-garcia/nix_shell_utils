@@ -11,6 +11,5 @@ sphinx:
 python:
   # Install our python package before building the docs
   install:
-    - requirements: docs/rftd_requirements.txt
     - method: pip
-      path: .
+      path: nix_shell_utils
