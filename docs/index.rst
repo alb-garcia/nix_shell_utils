@@ -94,11 +94,6 @@ the documentation can be then accessed @ ``$NIX_SHELL_UTILS_DIR/docs/_build/html
 Package Documentation
 ===========================================
 
-.. toctree::
-   :maxdepth: 3
-   :caption: Contents:
-
-   nix_shell_utils
 
 
 .. automodule:: nix_shell_utils
