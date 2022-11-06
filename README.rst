@@ -1,3 +1,9 @@
+|PyPI pyversions|
+
+.. |PyPI pyversions| image:: https://img.shields.io/pypi/pyversions/ansicolortags.svg
+   :target: https://pypi.python.org/pypi/ansicolortags/
+
+
 nix_shell_utils 
 ==========================================================
 simple shell-like commands for Python
