@@ -4,12 +4,15 @@ name = "nix_shell_utils"
 description = "Python wrapper functions for common shell commands"
 version = "0.0.1"
 authors = [{name = "Alberto Garcia Izquierdo"}]
-license = {file = "LICENSE"}
 readme = "README.rst"
 requires-python = ">=3.10"
-
 dependencies = ["setuptools>64.0"]
 
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License"
+    ]
+    
 [project.urls]
 repository    = "https://github.com/alb-garcia/nix_shell_utils"
 home          = "https://github.com/alb-garcia/nix_shell_utils"
