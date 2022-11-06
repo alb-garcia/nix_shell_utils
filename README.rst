@@ -1,12 +1,13 @@
-|PyPI pyversions|
 
-.. |PyPI pyversions| image:: https://img.shields.io/pypi/pyversions/ansicolortags.svg
-   :target: https://pypi.python.org/pypi/ansicolortags/
+.. image:: ./img/python.svg
+	   
+.. image:: ./img/tag.svg
 
-|Latest Tag|
+.. image:: ./img/test.svg
 
-.. |Latest Tag| image:: .. image:: https://img.shields.io/github/v/tag/alb-garcia/nix_shell_utils?style=plastic
-   :alt: GitHub tag (latest by date)
+.. image:: ./img/coverage.svg
+
+	   
 
 nix_shell_utils 
 ==========================================================
