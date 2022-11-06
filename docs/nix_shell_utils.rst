@@ -1,8 +1,9 @@
-nix\_shell\_utils package
+nix_shell_utils package
 =========================
 
-Module contents
----------------
+..
+   Module contents
+   ---------------
 
 .. automodule:: nix_shell_utils
    :members:
