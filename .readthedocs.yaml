@@ -10,7 +10,7 @@ build:
 
 python:
     install:
-        - requirements: ./docs/rtfd_requirements.txt
+        - requirements: docs/rtfd_requirements.txt
         - method: pip
         path: .
   
