@@ -11,6 +11,6 @@ build:
 
 python:
   install:
-    - requirements: ./docs/rtfd_requirements.txt
+    - requirements: docs/requirements.txt
     - method: pip
       path: .
