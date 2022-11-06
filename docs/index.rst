@@ -99,6 +99,9 @@ Package Documentation
 
    nix_shell_utils
 
+
+:doc:`nix_shell_utils.rst`
+     
 Indices and tables
 ==================
 
