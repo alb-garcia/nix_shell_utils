@@ -1,13 +1,13 @@
 
 |pic1| |pic2| |pic3| |pic4|
 
-.. |pic1|  image:: ./docs/img/python.svg?
+.. |pic1|  image:: https://raw.githubusercontent.com/alb-garcia/nix_shell_utils/main/docs/img/python.svg?
 		   
-.. |pic2|  image:: ./docs/img/tag.svg?
+.. |pic2|  image:: https://raw.githubusercontent.com/alb-garcia/nix_shell_utils/main/docs/img/tag.svg?
 		   
-.. |pic3|  image:: ./docs/img/test.svg?
-		   
-.. |pic4| image:: ./docs/img/coverage.svg?
+.. |pic3|  image:: https://raw.githubusercontent.com/alb-garcia/nix_shell_utils/main/docs/img/test.svg?
+
+.. |pic4| image:: https://raw.githubusercontent.com/alb-garcia/nix_shell_utils/main/docs/img/coverage.svg?		   
 
 		  
 	   
