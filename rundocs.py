@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# runs sphinx and shows in firefox
 from nix_shell_utils import *
 
 with cd('./docs'):

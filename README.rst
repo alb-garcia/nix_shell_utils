@@ -29,7 +29,7 @@ Simply type ::
 Documentation
 ----------------
 
-Documentation can be found @ `readthedocs<https://nix-shell-utils.readthedocs.io>`
+Documentation can be found @ `readthedocs <https://nix-shell-utils.readthedocs.io>`_
 
 
 Examples
