@@ -68,10 +68,16 @@ comment = input("git commit comment? ")
 
 print('\n-- commiting and pushing git repo\n')
 
+# clean emacs files
+rm('*~')
+with cd('docs'): rm('*~')
+with cd('nix_shell_utils'): rm('*~')
+
+
 runc('git status')
 runc('git add .')
 runc(f"git commit -m '{comment}'")
-runc("git push")
+runc("git push --tags")
 
 check('upload to pypi.org')
 print('\n-- releasing package \n')
