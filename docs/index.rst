@@ -21,9 +21,12 @@ Dependencies
 Installation
 -------------
 
-Simply type ::
 
-  pip install nix_shell_utils
+Simply type:
+
+.. code-block:: console
+		
+    pip install svtmp
 
   
 Documentation

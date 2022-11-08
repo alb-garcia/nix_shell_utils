@@ -14,7 +14,7 @@ import glob
 from typing import List
 from contextlib import contextmanager
 import sys
-
+import shlex
 
 
 def mkdir(path: str | List[str]) -> None:
@@ -92,14 +92,14 @@ def ln(src: str, dest: str) -> None:
     """
     run(f'ln -s {src} {dest}')
         
-def sed(cmd: str, file: str) -> None:
+def sed(cmd: str, file: str) -> CompletedProcess:
     """ executes shell command ```sed -i cmd file```
     
     Arguments:
         cmd  : sed command to be executed (e.g. ``s/foo/bar/g``)
         file : file where the sed command is executed in place.
     """
-    run(f'sed -i {cmd} {file}', quiet = False)
+    return run(f'sed {cmd} {file}', quiet = False)
 
 def basename(path):
     """ returns the basename of the input path.
@@ -205,6 +205,7 @@ def pwd() -> str:
     """ short hand for ``os.getcwd()``."""
     return os.getcwd()
 
+
 def runc(cmd: str,echo: bool = True, blocking: bool = False) -> int:
     """ runs the shell command ``cmd`` in `console mode`.
 
@@ -232,6 +233,9 @@ def runc(cmd: str,echo: bool = True, blocking: bool = False) -> int:
                universal_newlines=True)
     
     return c.returncode
+
+def source(filename: str) -> None:
+    runc(f'. {filename}')
     
 def run(cmd: str, blocking: bool = False, quiet: bool = True) -> CompletedProcess:
     """ runs a shell command with a ``subprocess.run`` wrapper with sensible defaults.
@@ -276,6 +280,70 @@ def run(cmd: str, blocking: bool = False, quiet: bool = True) -> CompletedProces
         print(cmd)
     c = sprun(cmd,
               shell = True,
+              capture_output = True,
+              check = blocking,
+              universal_newlines=True)
+        
+    if not quiet:
+        if c.stdout != '':
+            print(c.stdout, end = '', file = sys.stdout)
+        if c.stderr != '':
+            print(c.stderr, end = '', file = sys.stderr)
+            
+    return c
+def lrun(*cmds: str, blocking: bool = False, quiet: bool = True) -> List[CompletedProcess]:
+    results = []
+    
+    for cmd in cmds:
+        results.append(run(cmd,blocking = blocking, quiet = quiet))
+        
+    return results
+        
+
+def runopt(cmd: str, blocking: bool = False, quiet: bool = True) -> CompletedProcess:
+    """ runs a shell command with a ``subprocess.run`` wrapper with sensible defaults.
+
+    Example::
+
+        >>> c = run('cpu-info')
+        cpu-info
+        Packages:
+                0: Intel Celeron 6305
+        Microarchitectures:
+                2x unknown
+        Cores:
+                0: 1 processor (0), Intel unknown
+                1: 1 processor (1), Intel unknown
+        Logical processors (System ID):
+                0 (0): APIC ID 0x00000000
+                1 (1): APIC ID 0x00000002
+
+        >>> print(c.stdout)
+        Packages:
+                0: Intel Celeron 6305
+        Microarchitectures:
+                2x unknown
+        Cores:
+                0: 1 processor (0), Intel unknown
+                1: 1 processor (1), Intel unknown
+        Logical processors (System ID):
+                0 (0): APIC ID 0x00000000
+                1 (1): APIC ID 0x00000002
+
+        >>> print(c.returncode)
+        0
+    
+    Arguments:
+        cmd : the command to be run
+        blocking: if ``True``, an exception is thrown if the command exit code != 0
+        quiet: if ``False``, ``stdout``, ``stderr`` and an echo of the command executed is printed.
+    Returns: a :class:``subprocess.CompletedProcess`` object containing exit code, and the command executed (at least).
+    """
+    if not quiet:
+        print(cmd)
+    args = shlex.split(cmd)
+    c = sprun(args = args,
+              shell = False,
               capture_output = True,
               check = blocking,
               universal_newlines=True)
