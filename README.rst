@@ -13,7 +13,7 @@
 		  :target: https://nix-shell-utils.readthedocs.io/en/latest/?badge=latest
 		  :alt: Documentation Status
 
-.. |pic6| image:: https://github.com/alb-garcia/nix_shell_utils/actions/workflows/python-app.yml/badge.svg?
+.. |pic6| image:: https://github.com/alb-garcia/nix_shell_utils/actions/workflows/test.yml/badge.svg?
 		  
 	   
 
