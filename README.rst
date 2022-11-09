@@ -1,5 +1,5 @@
 
-|pic1| |pic2| |pic3| |pic4|
+|pic1| |pic2| |pic3| |pic4| |pic5| |pic6|
 
 .. |pic1|  image:: https://raw.githubusercontent.com/alb-garcia/nix_shell_utils/main/docs/img/python.svg?
 		   
@@ -9,6 +9,11 @@
 
 .. |pic4| image:: https://raw.githubusercontent.com/alb-garcia/nix_shell_utils/main/docs/img/coverage.svg?		   
 
+.. |pic5| image:: https://readthedocs.org/projects/nix-shell-utils/badge/?version=latest
+		  :target: https://nix-shell-utils.readthedocs.io/en/latest/?badge=latest
+		  :alt: Documentation Status
+
+.. |pic6| image:: https://github.com/alb-garcia/nix_shell_utils/actions/workflows/python-app.yml/badge.svg?
 		  
 	   
 
