@@ -77,8 +77,8 @@ with cd('nix_shell_utils'): rm('*~')
 
 runc('git status')
 runc('git add .')
-runc(f'git tag -m "{tcomment}" {new_version}')
 runc(f"git commit -m '{comment}'")
+runc(f'git tag -m "{tcomment}" {new_version}')
 runc("git push --tags")
 
 check('upload to pypi.org')
