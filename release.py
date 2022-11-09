@@ -52,6 +52,7 @@ if m != None:
     print(f'\n-- current version: {cur_version}\n')
 
 new_version = input('new version (X.Y.Z)? ')    
+tcomment     = input('tag comment ?')
 
 check(f'modify project files with version {new_version}')
 
@@ -76,6 +77,7 @@ with cd('nix_shell_utils'): rm('*~')
 
 runc('git status')
 runc('git add .')
+runc(f'git tag -m {tcomment} {new_version}')
 runc(f"git commit -m '{comment}'")
 runc("git push --tags")
 
