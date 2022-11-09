@@ -5,7 +5,7 @@ project= 'nix_shell_utils'
 from nix_shell_utils import run, cd ,sed, runc, source, rm
 import re
 import sys
-re_failed= re.compile(r'FAILED')
+
 re_cov = re.compile(rf'^TOTAL.*\D(\d+)%')
 re_version = re.compile(r'version\s*=\s*"(\d+\.\d+\.\d+)"')
 
@@ -23,12 +23,8 @@ print('\n-- runing tests with coverage\n')
 with cd('./test'):
     c = run('pytest --cov-report term-missing --cov=nix_shell_utils', quiet = False)
 
-test_result = 'passing'
-for line in c.stdout.splitlines():
-    m = re_failed.match(line) #no walrus operator to support Python 3.7
-    if m != None:
-        test_result = "FAILING"
 
+for line in c.stdout.splitlines():
     m = re_cov.match(line) #no walrus operator to support Python 3.7
     if m != None:
         coverage = int(m.groups()[0])
@@ -41,9 +37,8 @@ with cd('./docs'):
     runc('make html')
     runc('firefox ./_build/html/index.html')
 
+    
 check()
-
-
 c = sed('-n /version/p', 'pyproject.toml')
 m = re_version.match(c.stdout.strip())
 
@@ -56,18 +51,17 @@ tcomment     = input('tag comment ?')
 
 check(f'modify project files with version {new_version}')
 
+ver_re = '[0-9]\+\.[0-9]\+\.[0-9]\+'
 with cd('./docs'):
     sed(f'-i "s/--value=[0-9]\+/--value={coverage}/g"', 'genbadges')
-    sed(f'-i "s/[0-9]\+\.[0-9]\+\.[0-9]\+/{new_version}/g"', 'genbadges')
-    sed(f'-i "s/passing\|FAILING/{test_result}/g"', 'genbadges')
-    source('./genbadges')
-    sed(f'-i "s/[0-9]\+\.[0-9]\+\.[0-9]\+/{new_version}/g"', 'conf.py')    
+    sed(f'-i "s/{ver_re}/{new_version}/g"', 'genbadges')
+    
+    source('./genbadges') # generate local badges
 
-sed(f'-i "0,/[0-9]\+\.[0-9]\+\.[0-9]/s/[0-9]\+\.[0-9]\+\.[0-9]\+/{new_version}/g"', 'pyproject.toml')
+    sed(f'-i "s/{ver_re}/{new_version}/g"', 'conf.py')    
 
-comment = input("git commit comment? ")
+sed(f'-i "0,/{ver_re}/s/{ver_re}/{new_version}/g"', 'pyproject.toml')
 
-print('\n-- commiting and pushing git repo\n')
 
 # clean emacs files
 rm('*~')
@@ -75,14 +69,21 @@ with cd('docs'): rm('*~')
 with cd('nix_shell_utils'): rm('*~')
 
 
+# show status in command line before proceed
 runc('git status')
 check()
-runc('git add .')
-runc(f"git commit -m '{comment}'")
-runc("git push")
-runc(f'git tag -m "{tcomment}" {new_version}')
-runc("git push --tags")
 
+# add/commit/push/tag/push-tag
+print('\n-- commiting and pushing git repo\n')
+comment = input("git commit comment? ")
+
+runc( 'git add .')
+runc(f"git commit -m '{comment}'")
+runc( "git push")
+runc(f'git tag -m "{tcomment}" {new_version}')
+runc( "git push --tags")
+
+# check and upload to pypi.org
 check('upload to pypi.org')
 print('\n-- releasing package \n')
 

@@ -1,12 +1,10 @@
 
-|pic1| |pic2| |pic3| |pic4| |pic5| |pic6|
+|pic1| |pic2| |pic4| |pic5| |pic6|
 
 .. |pic1|  image:: https://raw.githubusercontent.com/alb-garcia/nix_shell_utils/main/docs/img/python.svg?
 		   
 .. |pic2|  image:: https://raw.githubusercontent.com/alb-garcia/nix_shell_utils/main/docs/img/tag.svg?
 		   
-.. |pic3|  image:: https://raw.githubusercontent.com/alb-garcia/nix_shell_utils/main/docs/img/test.svg?
-
 .. |pic4| image:: https://raw.githubusercontent.com/alb-garcia/nix_shell_utils/main/docs/img/coverage.svg?		   
 
 .. |pic5| image:: https://readthedocs.org/projects/nix-shell-utils/badge/?version=latest
