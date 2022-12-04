@@ -1,6 +1,6 @@
 # modify values and source the file
 rm -rf ./img/*
 anybadge --value=87 --file=./img/coverage.svg coverage
-anybadge -l tag -v "0.0.11" -f ./img/tag.svg
+anybadge -l tag -v "0.0.12" -f ./img/tag.svg
 anybadge -l python -v "3.7|3.8|3.9|3.10|3.11" -f ./img/python.svg
 
